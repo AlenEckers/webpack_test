@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="avalon/avalon.js"></script>
+    <style>
+        .table {
+            border-collapse: collapse;
+            width: 400px;
+            border: 1px solid black;
+        }
+
+        .table td {
+            border: 1px solid black;
+            text-indent: 1em;
+        }
+
+        .table .even td {
+            background: rgba(152, 175, 89, 0.78);
+            color: #676767;
+        }
+        .panel {
+            width: 300px;
+            height: 100px;
+            border: 1px solid #676767;
+        }
+        button {
+            width: 150px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+        }
+
+        .ms-tabs {
+            border: 1px solid violet;
+            width: 430px;
+            padding: 5px;
+            height: 200px;
+        }
+
+    </style>
+    <script>
+        var vm=avalon.define({
+            $id:"test",
+            data:[
+                {
+                    name: "aaa",
+                    size: 213,
+                    date: Date.now() + 20
+                }, {
+                    name: "bbb",
+                    size: 4576,
+                    date: new Date - 4
+                }, {
+                    name: "ccc",
+                    size: 563,
+                    date: new Date - 7
+                }, {
+                    name: "eee",
+                    size: 3713,
+                    date: 9 + Date.now()
+                }, {
+                    name: "555",
+                    size: 389,
+                    date: Date.now() - 20
+                }
+            ],
+            fxjg : [],
+            data1:[
+                    [1,2,3],
+                    [4,5,6],
+                    [7,8,9]
+            ],
+            array: avalon.range(0, 14),
+            click:function (a,b) {
+                console.log("行：" + (a+1) +"列："+(b+1) )
+            },
+            lang: [],
+            langtext: [],
+            plane:[{
+                text: "div1"
+            },{
+                text: "div2"
+            },{
+                text: "div3"
+            },{
+                text: "div4"
+            }],
+            toggle: function (i) {
+                vm.currentIndex = i
+            },
+            currentIndex : 0,
+            object: {
+                a: 1,
+                b: 1,
+                c: 1,
+                d: 1
+            },
+            text: "初始状态"
+        })
+
+        vm.lang.$watch("length", function () {
+            vm.langtext = vm.lang;
+        })
+
+        var model = avalon.define({
+            $id: "test2",
+            currentIndex: 0,
+            toggle: function(index) {
+                model.currentIndex = index
+            }
+        })
+
+        var a = function(c){
+            var b = "";
+            b = c + "shuziu";
+            return b
+        }
+
+        function c() {
+
+            console.log(a(3));
+            console.log(b);
+        }
+    </script>
+</head>
+
+<body ms-controller="test">
+
+<table>
+    <tr ms-repeat="data1">
+        <td ms-repeat-ele="el" ms-click="click($outer.$index,$index)">{{ele}}</td>
+    </tr>
+</table>
+
+<button onclick="c()">click</button>
+<br>
+<br>
+
+<div>
+    <input type="checkbox" ms-duplex-string="lang" value="#C">#C
+    <input type="checkbox" ms-duplex-string="lang" value="java">java
+    <input type="checkbox" ms-duplex-string="lang" value="ruby">ruby
+    <input type="checkbox" ms-duplex-string="lang" value="javascript">javascript
+
+    <br>
+    <br>
+     <select>
+        <option ms-repeat="langtext">{{el}}</option>
+    </select>
+    <br>
+    <br>
+
+    <div>
+        <button ms-repeat="plane" ms-click="toggle($index)" type="button">{{$index + 1}}</button>
+        <div ms-repeat="plane" ms-if-loop="$index === currentIndex" class="panel">
+            {{el.text}}
+        </div>
+
+    </div>
+</div>
+<div ms-controller="test2">
+    <button ms-click="toggle(0)">触发器1</button>
+    <button ms-click="toggle(1)">触发器2</button>
+    <button ms-click="toggle(2)">触发器3</button>
+    <div class="ms-tabs" ms-visible="currentIndex === 0">切换卡1
+        <br/>其他内容</div>
+    <div class="ms-tabs" ms-visible="currentIndex === 1">切换卡2
+        <br/>及司徒正美</div>
+    <div class="ms-tabs" ms-visible="currentIndex === 2">切换卡3
+        <br/>最后一个了</div>
+</div>
+
+<p>演示对象循环的对象被整个替换掉的效果</p>
+<p>{{text}}实验</p>
+<ul>
+    <li ms-repeat="object">{{$key}}:<strong>{{$val}}</strong>(通过ms-repeat实现)</li>
+</ul>
+<ol ms-with="object">
+    <li>{{$key}}:<strong>{{$val}}</strong>(通过ms-with实现)</li>
+</ol>
+</body>
+
+</html>
